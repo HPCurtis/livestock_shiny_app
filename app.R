@@ -1,21 +1,7 @@
 library(fpp3)
 library(shiny)
 
-setwd("/home/harrison/Desktop/gitHubRepos/livestock_shiny_app/")
-
-if (!file.exists("data/aus_livestock")) {
-  path <- "/home/harrison/Desktop/gitHubRepos/livestock_shiny_app/data/aus_livestock"
-  write.csv(aus_livestock, path, row.names = FALSE)
-  print("Austalian livestock data written to repository")
-  # read in data file
-  df <- read.csv("data/aus_livestock")
- 
-} else {
-  print("File already exists")
-  # Read in data file if already exists in repository
-  df <- read.csv("data/aus_livestock")
-}
-
+df<- aus_livestock
 # Ensure the data types are correct
 df$Month <- as.Date(df$Month)
 df$year <- as.integer(substr(df$Month, 1, 4))
@@ -26,7 +12,6 @@ ui <- fluidPage(
   # App title ----
  titlePanel("Australian Livestock App"),
 )
-
 
 # Define UI for the app
 ui <- fluidPage(
@@ -58,19 +43,34 @@ server <- function(input, output) {
     filtered_df <- df %>%
     filter(Animal == input$livestock_id & State == input$state_id, year >= input$yearRange[1], year <= input$yearRange[2]) %>%
     group_by(year) %>% 
-    aggregate(Count ~ year, FUN = sum)
+    aggregate(Count ~ year, FUN = sum) %>% as_tsibble(index = year)
     
     # Check if there are enough data points to plot a line
     if (nrow(filtered_df) < 2) {
       return(NULL)  # No plot if less than 2 data points
     }
-                                    
+    
+    train <- filtered_df |>
+      filter_index("1972" ~ "2013")
+    
+    fit <- train %>% model(
+      Mean = MEAN(Count),
+    )
+    
+    livestock_fc <- fit |> forecast(h = 5)
+    
+    # Not in use but useful.
+    if (TRUE) {
+      
     ggplot(data = filtered_df, aes(x = year, y = Count, group = 1)) +
       geom_line(color = "blue") +
+      #geom_line(data = livestock_fc, aes(y = .mean), color = "red", linetype = "dashed") +
       labs(title = paste("Time Series Data for", input$livestock_id, "in", input$state_id),
            x = "Date",
            y = "Count") +
       theme_minimal()
+    }
+    
   })
 }
 
