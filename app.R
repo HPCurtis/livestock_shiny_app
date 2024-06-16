@@ -38,6 +38,7 @@ ui <- fluidPage(
                   value = c(min(df$year), max(df$year)),
                   step = 1,
                   sep = ""),
+      selectInput(inputId = "model_id", label = "Model", choices = c("Mean", "Naive")),
       
       numericInput("forecasts_range", label = "Forecast range",
                    value = 2, 
@@ -67,9 +68,11 @@ server <- function(input, output) {
     # specify the range of time for data to train foecast model.
     train <- filtered_df |>
       filter_index(as.character(input$trainRange[1]) ~ as.character(input$trainRange[2]))
+    
+    models <- list(Mean = MEAN, Naive = NAIVE)
     # Train the forecast model.
     fit <- train %>% model(
-      Mean = MEAN(Count),
+      f = models[[input$model_id]](Count),
     )
     # Generate forecasts from the model.
     livestock_fc <- fit |> forecast(h = input$forecasts_range)
