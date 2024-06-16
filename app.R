@@ -28,7 +28,20 @@ ui <- fluidPage(
                   max = max(df$year),
                   value = c(min(df$year), max(df$year)),
                   step = 1,
-                  sep = "")
+                  sep = ""),
+      
+      sliderInput("trainRange",
+                  label = "Select Trianing data Range",
+                  min = min(df$year),
+                  max = max(df$year),
+                  value = c(min(df$year), max(df$year)),
+                  step = 1,
+                  sep = ""),
+      
+      numericInput("forecasts_range", label = "Forecast range",
+                   value = 2, 
+                   min = 2,
+                   max = 30)
     ),
     
     mainPanel(
@@ -51,23 +64,23 @@ server <- function(input, output) {
     }
     
     train <- filtered_df |>
-      filter_index("1972" ~ "2013")
+      filter_index(as.character(input$trainRange[1]) ~ as.character(input$trainRange[2]))
     
     fit <- train %>% model(
       Mean = MEAN(Count),
     )
     
-    livestock_fc <- fit |> forecast(h = 5)
+    livestock_fc <- fit |> forecast(h = input$forecasts_range)
     
     # Not in use but useful.
     if (TRUE) {
       
     ggplot(data = filtered_df, aes(x = year, y = Count, group = 1)) +
       geom_line(color = "blue") +
-      #geom_line(data = livestock_fc, aes(y = .mean), color = "red", linetype = "dashed") +
+      geom_line(data = livestock_fc, aes(y = .mean), color = "red", linetype = "dashed") +
       labs(title = paste("Time Series Data for", input$livestock_id, "in", input$state_id),
-           x = "Date",
-           y = "Count") +
+           x = "Year",
+           y = "Animals slaughtered") +
       theme_minimal()
     }
     
