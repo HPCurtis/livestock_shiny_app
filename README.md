@@ -1,4 +1,4 @@
-# Australian livestock forecasting shiny app.
+#Automatic Australian livestock forecasting shiny app.
 
 The following code project is an implementation of a shiny app for the forecasting of Australian livestock data.
 
