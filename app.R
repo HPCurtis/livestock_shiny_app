@@ -8,17 +8,10 @@ df<- aus_livestock
 # Add year column are correct
 df$year <- as.integer(substr(df$Month, 1, 4))
 
-# Define UI for app that draws a histogram ----
-ui <- fluidPage(
-  
-  # App title ----
- titlePanel("Australian Livestock forecasts"),
-)
-
 # Define UI for the app
 ui <- fluidPage(
   # App title
-  titlePanel("Australian Livestock App"),
+  titlePanel("Australian Livestock forecasts"),
   
   sidebarLayout(
     sidebarPanel(
