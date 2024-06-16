@@ -71,7 +71,7 @@ server <- function(input, output) {
     fit <- train %>% model(
       Mean = MEAN(Count),
     )
-    
+    # Generate forecasts from the model.
     livestock_fc <- fit |> forecast(h = input$forecasts_range)
     
     # Not in use but useful.
