@@ -1,16 +1,18 @@
+# Import pre-requiste packages for data and forecasts.
 library(fpp3)
 library(shiny)
 
+# Import Australian livestock data.
 df<- aus_livestock
-# Ensure the data types are correct
-df$Month <- as.Date(df$Month)
+
+# Add year column are correct
 df$year <- as.integer(substr(df$Month, 1, 4))
 
 # Define UI for app that draws a histogram ----
 ui <- fluidPage(
   
   # App title ----
- titlePanel("Australian Livestock App"),
+ titlePanel("Australian Livestock forecasts"),
 )
 
 # Define UI for the app
