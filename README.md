@@ -11,3 +11,7 @@ Based of the fable package api the following models are applicable.
 
 ### Requirements
 libraries: ffp3, shiny
+
+References
+
+Hyndman, R.J., & Athanasopoulos, G. (2021) Forecasting: principles and practice, 3rd edition, OTexts: Melbourne, Australia. OTexts.com/fpp3. Accessed on UTD.
