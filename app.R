@@ -5,7 +5,7 @@ library(shiny)
 # Import Australian livestock data.
 df<- aus_livestock
 
-# Add year column are correct
+# Add year column.
 df$year <- as.integer(substr(df$Month, 1, 4))
 
 # Define UI for the app
@@ -13,10 +13,16 @@ ui <- fluidPage(
   # App title
   titlePanel("Australian Livestock forecasts"),
   
+  # Define side panel and following options to vary the data plotted.
   sidebarLayout(
+    
+    # All sidebar widgets
     sidebarPanel(
+      # Option to vary the type of livestock plotted.
       selectInput(inputId = "livestock_id", label = "Livestock", choices = unique(df$Animal)),
+      # Option to vary the australian state for which the data is from.
       selectInput(inputId = "state_id", label = "State", choices = unique(df$State)),
+      # Option vary the years plotted.
       sliderInput("yearRange",
                   label = "Select Year Range",
                   min = min(df$year),
@@ -24,7 +30,7 @@ ui <- fluidPage(
                   value = c(min(df$year), max(df$year)),
                   step = 1,
                   sep = ""),
-      
+      # Option to vary the training dat used to train models and forecasts generated.
       sliderInput("trainRange",
                   label = "Select Trianing data Range",
                   min = min(df$year),
@@ -39,13 +45,14 @@ ui <- fluidPage(
                    max = 30)
     ),
     
+    # UI for the main panel specifically the plot of the time-series data. 
     mainPanel(
       plotOutput("timeseries_plot")
     )
   )
 )
 
-# Define server logic
+# Define server side functionality.
 server <- function(input, output) {
   output$timeseries_plot <- renderPlot({
     filtered_df <- df %>%
@@ -57,10 +64,10 @@ server <- function(input, output) {
     if (nrow(filtered_df) < 2) {
       return(NULL)  # No plot if less than 2 data points
     }
-    
+    # specify the range of time for data to train foecast model.
     train <- filtered_df |>
       filter_index(as.character(input$trainRange[1]) ~ as.character(input$trainRange[2]))
-    
+    # Train the forecast model.
     fit <- train %>% model(
       Mean = MEAN(Count),
     )
@@ -81,7 +88,6 @@ server <- function(input, output) {
     
   })
 }
-
 
 # Run the app ---- 
 shinyApp(ui = ui, server = server)
