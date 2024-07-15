@@ -1,6 +1,6 @@
-#Automatic Australian livestock forecasting shiny app.
+# Automatic Australian livestock forecasting shiny app.
 
-The following code project is an implementation of a shiny app for the forecasting of Australian livestock data.
+The following code project is an implementation of a shiny app for the forecasting of Australian livestock data. The work highlights the non-triviality of forecasting and the resulting difficulty to generate automatic tools for generating useful forecasts.  
 
 ## Current models implemented
 Based of the fable package api the following models are applicable.
