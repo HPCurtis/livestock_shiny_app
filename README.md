@@ -1,6 +1,6 @@
 # Automatic Australian livestock forecasting shiny app.
 
-The following code project is an implementation of a shiny app for the forecasting of Australian livestock data. The work highlights the non-triviality of forecasting and the resulting difficulty to generate automatic tools for generating useful forecasts.  
+The following code project is an implementation of a shiny app for the forecasting of Australian livestock data. The work highlights the non-triviality of forecasting and the resulting difficulty to generate automatic tools for generating useful forecasts. The app is deployed using the shinyapp.io service 
 
 [Use Shiny app here](https://d8hpi9-harrison-curtis.shinyapps.io/app_cattle/)
 
